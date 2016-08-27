@@ -1,6 +1,7 @@
 "use strict";
 
 const fs = require('fs');
+const Project = require('../models/Project');
 
 exports.index = (req, res) => {
 
@@ -15,11 +16,20 @@ exports.index = (req, res) => {
 };
 
 exports.postFileUpload = (req, res, next) => {
-  req.flash('success', { msg: 'File was uploaded successfully.' });
-  console.log(req.file.originalname);
-  res.render('home', {
-    title: 'Home',
-    originalname: req.file.originalname,
-    theFiles: []
+  const project = new Project({
+    email: req.user.email,
+    fileName: req.file.originalname,
+    reportFileName: 'in_process'
+  });
+
+  project.save((err) => {
+    if (err) { return next(err); }
+    req.flash('success', { msg: 'File was uploaded successfully. Project created!' });
+    console.log(req.file.originalname);
+    res.render('home', {
+      title: 'Home',
+      originalname: req.file.originalname,
+      theFiles: []
+    });
   });
 };
