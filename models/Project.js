@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const projectSchema = new mongoose.Schema({
   email: String,
+  fileSystemName: String,
   fileName: String,
   reportFileName: String,
   description: String
