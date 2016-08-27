@@ -19,6 +19,7 @@ exports.postFileUpload = (req, res, next) => {
   console.log(req.file.originalname);
   res.render('home', {
     title: 'Home',
-    originalname: req.file.originalname
+    originalname: req.file.originalname,
+    theFiles: []
   });
 };
