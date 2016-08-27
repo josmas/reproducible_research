@@ -21,3 +21,15 @@ block content
         h2 Preview of the Data
         p The data file #{originalname} is being processed.
         p We will check and automatically load the results once they are ready.
+
+  .row
+    .col-sm-10
+      h2 Or choose an already existing project from the list
+      table(class="table table-striped table-bordered table-condensed")
+        thead
+          tr
+            th File Name
+        tbody
+          each file in theFiles
+            tr
+              td #{file}

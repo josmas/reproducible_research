@@ -1,10 +1,16 @@
-/**
- * GET /
- * Home page.
- */
+"use strict";
+
+const fs = require('fs');
+
 exports.index = (req, res) => {
-  res.render('home', {
-    title: 'Home'
+
+  fs.readdir('./uploads', function(err, files){
+    var theFiles = [];
+    if (!err) theFiles = files; // if there is an error, render with no files
+    res.render('home', {
+      title: 'Home',
+      theFiles: theFiles
+    });
   });
 };
 
