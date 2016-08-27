@@ -1,25 +1,26 @@
 "use strict";
 
-const fs = require('fs');
 const Project = require('../models/Project');
 
 exports.index = (req, res) => {
 
-  fs.readdir('./uploads', function(err, files){
-    var theFiles = [];
-    if (!err) theFiles = files; // if there is an error, render with no files
-    res.render('home', {
-      title: 'Home',
-      theFiles: theFiles
-    });
-  });
+  Project.find()
+      .exec((err, projects) => {
+        var theProjects = [];
+        if (!err) theProjects = projects; // if there is an error, render with no files
+        res.render('home', {
+          title: 'Home',
+          projects: theProjects
+        });
+      });
 };
 
 exports.postFileUpload = (req, res, next) => {
   const project = new Project({
     email: req.user.email,
     fileName: req.file.originalname,
-    reportFileName: 'in_process'
+    reportFileName: 'in_process',
+    description: req.body.description
   });
 
   project.save((err) => {
@@ -29,7 +30,7 @@ exports.postFileUpload = (req, res, next) => {
     res.render('home', {
       title: 'Home',
       originalname: req.file.originalname,
-      theFiles: []
+      projects: [project]
     });
   });
 };

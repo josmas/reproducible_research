@@ -13,8 +13,12 @@ block content
             label(class="btn btn-dropbox btn-file")
               input(type="file", name='myFile', id="dataFile", style="display: none;")
               | Upload your Data file
-          p
+          .form-group
+            label Description
+              textarea(class="form-control", rows="3", name="description")
+          .form-group
             #dataFileDiv
+          .form-group
             button.btn.btn-primary(type='submit') Submit
     else
       .col-sm-10
@@ -29,7 +33,11 @@ block content
         thead
           tr
             th File Name
+            th Description
+            th Report link
         tbody
-          each file in theFiles
+          each project in projects
             tr
-              td #{file}
+              td #{project.fileName}
+              td #{project.description}
+              td #{project.reportFileName}
