@@ -79,7 +79,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use((req, res, next) => {
-  if (req.path === '/api/upload') {
+  if (req.path === '/api/upload' || req.path === '/') {
     next();
   } else {
     lusca.csrf()(req, res, next);
@@ -108,6 +108,7 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }))
  * Primary app routes.
  */
 app.get('/', homeController.index);
+app.post('/', upload.single('myFile'), homeController.postFileUpload);
 app.get('/login', userController.getLogin);
 app.post('/login', userController.postLogin);
 app.get('/logout', userController.logout);
