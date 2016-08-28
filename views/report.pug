@@ -6,19 +6,48 @@ block content
       if report && report.fileName
         h2 This is the report for #{report.fileName}
         .row
-          .col-sm-10
-            h2 Report data
+          .col-sm-8
+            h2 Report Information
             table(class="table table-striped table-bordered table-condensed")
               thead
                 tr
                   th File Name
                   th Description
-                  th Report data
               tbody
                 tr
                   td #{report.fileName}
                   td #{report.description}
-                  td #{report.data}
+        .row
+          .col-sm-12
+            h2 Report Data
+            table(class="table table-striped table-bordered table-condensed")
+              thead
+                tr
+                  th Severity
+                  th Description
+                  th row
+                  th Column
+                  th Possible Actions
+                  th Submit
+              tbody
+                each err in report.data
+                  tr
+                    if err.severity === 'r'
+                      td(class="bg-danger") #{err.severity}
+                    else if err.severity === 'y'
+                      td(class="bg-warning") #{err.severity}
+                    else
+                      td #{err.severity}
+                    td #{err.description}
+                    td #{err.line_number}
+                    td #{err.cell_number}
+                    td
+                      each act in err.actions
+                        input(type='checkbox', name=action)
+                        | &nbsp;#{act}&nbsp;&nbsp;&nbsp;
+                    td
+                      button.btn.btn-primary(type='button') Make Corrections
+
       else
         h2 That report does not exist.
 

@@ -5,7 +5,7 @@ const reportSchema = new mongoose.Schema({
   fileName: String,
   description: String,
   reportFileName: String,
-  data: String
+  data: []
 }, { timestamps: true });
 
 const Report = mongoose.model('Report', reportSchema);

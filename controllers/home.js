@@ -39,7 +39,6 @@ function initRepo(fileSystemName, repoName, callback){
   var repo;
   var index;
   var oid;
-  var that = this;
 
   fse.copy(fileSystemName, './repos/' + repoName + '/' + repoName, function (err) {
     if (err) return console.error(err);
@@ -94,6 +93,9 @@ exports.postFileUpload = (req, res, next) => {
   // This is an Async call that will be ready at some stage, so we won't block the UI for this. Just let it process.
   // If the user attempts to see the report before it's been saved, they will be informed that it does not exist yet.
   callReportProgram(function(err, data){
+
+    //TODO FAKING the data for now
+    data = require('../test/report_data.json');
     if (err) return next(err);
     const report = new Report({
       fileSystemName: req.file.path,

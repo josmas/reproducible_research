@@ -1,0 +1,30 @@
+[
+  {
+    "severity": "r",
+    "description": "There is an issue with types",
+    "line_number": 12,
+    "cell_number": 6,
+    "actions": ["Replace with default", "Omit"]
+  },
+  {
+    "severity": "r",
+    "description": "There is an issue with types",
+    "line_number": 22,
+    "cell_number": 2,
+    "actions": ["Replace with default", "Leave as is"]
+  },
+  {
+    "severity": "y",
+    "description": "There is an issue with potential empty cells",
+    "line_number": 82,
+    "cell_number": 5,
+    "actions": ["Replace Custom"]
+  },
+  {
+    "severity": "r",
+    "description": "There is an issue with alignment",
+    "line_number": 120,
+    "cell_number": 3,
+    "actions": ["Replace with Default"]
+  }
+]
