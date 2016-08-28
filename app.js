@@ -31,6 +31,7 @@ const homeController = require('./controllers/home');
 const userController = require('./controllers/user');
 // const apiController = require('./controllers/api');
 const contactController = require('./controllers/contact');
+const reportController = require('./controllers/report');
 
 /**
  * API keys and Passport configuration.
@@ -79,7 +80,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use((req, res, next) => {
-  if (req.path === '/api/upload' || req.path === '/') {
+  if (req.path === '/api/upload' || req.path === '/' || req.path === '/report') {
     next();
   } else {
     lusca.csrf()(req, res, next);
@@ -109,6 +110,8 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }))
  */
 app.get('/', homeController.index);
 app.post('/', upload.single('myFile'), homeController.postFileUpload);
+app.get('/report', reportController.index);
+app.post('/report', reportController.createReport);
 app.get('/login', userController.getLogin);
 app.post('/login', userController.postLogin);
 app.get('/logout', userController.logout);

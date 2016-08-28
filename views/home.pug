@@ -40,4 +40,5 @@ block content
             tr
               td #{project.fileName}
               td #{project.description}
-              td #{project.reportFileName}
+              td
+                a(href='/report?fileName=' + project.fileName) Link
