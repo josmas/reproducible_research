@@ -2,6 +2,8 @@
 
 const Project = require('../models/Project');
 const Report = require('../models/Report');
+const nodegit = require('nodegit');
+const fse = require('fs-extra');
 
 exports.index = (req, res) => {
 
@@ -32,6 +34,52 @@ function callReportProgram(callback){
   });
 }
 
+function initRepo(fileSystemName, repoName, callback){
+
+  var repo;
+  var index;
+  var oid;
+  var that = this;
+
+  fse.copy(fileSystemName, './repos/' + repoName + '/' + repoName, function (err) {
+    if (err) return console.error(err);
+    var pathToRepo = require("path").resolve("./repos/" + repoName);
+    var isBare = 0;
+    nodegit.Repository.init(pathToRepo, isBare).then(function (theRepo) {
+      repo = theRepo;
+      return theRepo.index();
+    })
+    .then(function(indexResult) {
+      index = indexResult;
+      return index.read(1);
+    })
+    .then(function() {
+      return index.addByPath(repoName);
+    })
+    .then(function() {
+      return index.write();
+    })
+    .then(function() {
+      return index.writeTree();
+    })
+    .then(function(oidResult) {
+      var author = nodegit.Signature.create("Scott Chacon", "reproducible_research@gmail.com", 123456789, 60);
+      var committer = nodegit.Signature.create("Scott A Chacon", "reproducible_research@github.com", 987654321, 90);
+
+      return repo.createCommit("HEAD", author, committer, "Initial import of Dataset from upload", oidResult, []);
+    })
+    .then(function(commitId) {
+      return callback(null, commitId);
+    })
+    .catch(function (reasonForFailure) {
+      // If the repo cannot be created for any reason we can handle that case here.
+      console.log(reasonForFailure); //TODO Set the Project repo URL to failed?
+      callback(reasonForFailure);
+    });
+  });
+
+}
+
 exports.postFileUpload = (req, res, next) => {
 
   console.log(req.file.filename);
@@ -58,6 +106,11 @@ exports.postFileUpload = (req, res, next) => {
     report.save((err) => {
       if (err) { return next(err); }
     });
+  });
+
+  // This is also Async; goes off and makes a git repo
+  initRepo(project.fileSystemName, project.reportFileName, function(err, commitId){
+    console.log('Repo is all done; if it Worked!!! Commit Id: ' + commitId);
   });
 
   project.save((err) => {
