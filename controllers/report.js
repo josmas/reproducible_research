@@ -6,9 +6,9 @@ exports.index = (req, res, next) => {
 
   var fileName = req.query.fileName;
   console.log(req.query.fileName);
-  Report.findOne({ fileName: fileName}, (err, report) => {
-    console.log(err);
-    console.log(report);
+  //TODO fileName may not be unique, not a good filter. +Username wouldn't work either.
+  // Could make Report a subdocument of the Project itself. We need to save versions anyway.
+  Report.findOne({ fileName: fileName }, (err, report) => {
     if (err) next(err);
     res.render('report', {
       title: 'Report',
